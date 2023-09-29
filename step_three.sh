@@ -19,5 +19,7 @@ docker-compose exec ceph-mon radosgw-admin caps add --caps="buckets=*;users=*;us
 docker-compose exec ceph-mon ceph config set mon mon_warn_on_insecure_global_id_reclaim_allowed false
 docker-compose exec ceph-mon ceph config set mon auth_expose_insecure_global_id_reclaim false
 
-#docker-compose exec ceph-mon s3cmd mb s3://tvs-media
+docker-compose exec ceph-mon s3cmd mb s3://tvs-media
+docker-compose exec ceph-mon s3cmd sync /etc/tvs-media/ s3://tvs-media/
+
 set +x

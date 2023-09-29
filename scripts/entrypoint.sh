@@ -85,6 +85,9 @@ case "$CEPH_DAEMON" in
   mds_bootstrap)
       # TAG: mds_bootstrap
       source /opt/ceph-container/bin/bootstrap/mds_bootstrap.sh
+      # Run after rgw_bootstrap
+      bootstrap_sree
+      # Run after rgw_bootstrap
       bootstrap_mds
       ;;
   nfs_bootstrap)

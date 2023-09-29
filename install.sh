@@ -1,14 +1,9 @@
-./first_run.sh
+./step_one.sh
 
 docker-compose up -d ceph-mon ceph-mgr
 
-#./run_cc.sh
+./step_two.sh
 
-# Create OSDs
-#./create_osd.sh 3
-
-# Create pools
-#./osd_config.sh
 # Create OSDs for RBD mirroring
 docker-compose up -d ceph-osd1
 docker-compose up -d ceph-osd2
@@ -21,7 +16,4 @@ docker-compose up -d ceph-rbd
 # Create NFS
 docker-compose up -d ceph-nfs
 
-
-#docker-compose up -d ceph-nfs ceph-mds ceph-rbd
-
-# sudo ./run_cd.sh
+./step_three.sh

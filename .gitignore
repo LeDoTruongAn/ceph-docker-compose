@@ -3,3 +3,6 @@ ceph_conf
 ceph_data
 osds
 tvs-media
+tmp
+.s3cfg
+.env
