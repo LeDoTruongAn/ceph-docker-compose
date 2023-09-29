@@ -1,3 +1,4 @@
+#!/bin/bash
 set -x
 mkdir -p ceph_conf
 mkdir -p ceph_data
