@@ -1,0 +1,5 @@
+.idea
+ceph_conf
+ceph_data
+osds
+tvs-media
