@@ -42,6 +42,6 @@ $DOCKER_COMPOSE_CMD exec ceph-mon radosgw-admin caps add --caps="buckets=*;users
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph config set mon mon_warn_on_insecure_global_id_reclaim_allowed false
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph config set mon auth_expose_insecure_global_id_reclaim false
 
-# Create an S3 bucket and sync data (assuming /etc/tvs-media exists)
-$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd mb s3://tvs-media
-$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/tvs-media/ s3://tvs-media/
+# Create an S3 bucket and sync data (assuming /etc/resources exists)
+$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd mb s3://resources
+$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/resources/ s3://resources/

@@ -2,7 +2,7 @@
 ceph_conf
 ceph_data
 osds
-tvs-media
+resources
 tmp
 .s3cfg
 .env
