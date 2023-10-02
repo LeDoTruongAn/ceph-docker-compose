@@ -1,5 +1,7 @@
 # Ceph Configuration and Deployment Scripts
 
+![ceph-mimic-dash.png](ceph-mimic-dash.png)
+
 This set of shell scripts is designed to simplify the configuration and deployment of a Ceph storage cluster using Docker Compose. Ceph is a distributed storage platform commonly used for large-scale storage solutions. These scripts automate the process of creating necessary directories, configuring Ceph settings, and deploying Ceph components.
 
 ## `step_one.sh`
