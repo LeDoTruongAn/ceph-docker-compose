@@ -59,3 +59,10 @@ Usage:
 After running this script, your Ceph cluster should be configured with a working Ceph Dashboard, an admin user, and an S3 user. Additionally, an S3 bucket is created, and data is synchronized to it using the `s3cmd` utility (assuming the `/etc/resources` directory exists).
 
 These scripts are designed to streamline the setup of a Ceph storage cluster for various use cases, providing a foundation for scalable and reliable distributed storage solutions.
+
+## Special Thanks
+
+I would like to extend my heartfelt thanks to [Fatlan](https://github.com/fatlan) for his fantastic work on the original [Ceph-Docker-Compose](https://github.com/fatlan/Ceph-Docker-Compose) repository. This project builds upon his foundation, making it easier to configure and deploy Ceph clusters using Docker Compose. Their dedication and open-source contribution are greatly appreciated.
+
+## License
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
