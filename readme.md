@@ -62,7 +62,7 @@ These scripts are designed to streamline the setup of a Ceph storage cluster for
 
 ## Special Thanks
 
-I would like to extend my heartfelt thanks to [Fatlan](https://github.com/fatlan) for his fantastic work on the original [Ceph-Docker-Compose](https://github.com/fatlan/Ceph-Docker-Compose) repository. This project builds upon his foundation, making it easier to configure and deploy Ceph clusters using Docker Compose. Their dedication and open-source contribution are greatly appreciated.
+I would like to extend my heartfelt thanks to [Fatlan](https://github.com/fatlan) for his fantastic work on the original [Ceph-Docker-Compose](https://github.com/fatlan/Ceph-Docker-Compose) repository. This project builds upon his foundation, making it easier to configure and deploy Ceph clusters using Docker Compose. His dedication and open-source contribution are greatly appreciated.
 
 ## License
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
