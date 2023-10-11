@@ -6,7 +6,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: [ "/bin/sh", "-c" ]
+    entrypoint:
+        - /bin/bash
+        - -c
     platform: linux/amd64
     env_file: .env  # Load environment variables from the .env file
     volumes:
@@ -22,12 +24,14 @@ services:
     extends:
       service: common-environment
     container_name: ceph-mon
+    environment:
+      MON_ID: 0
+    privileged: true
     hostname: ceph-mon
     restart: always
     command:
-      - | 
-         sshd && chronyd && /opt/ceph-container/bin/entrypoint.sh mon_bootstrap
-
+      - |
+         sshd && /opt/ceph-container/bin/entrypoint.sh mon_bootstrap
     networks:
       ceph-net:
         ipv4_address: 192.168.55.2
@@ -154,7 +158,6 @@ services:
     networks:
       ceph-net:
         ipv4_address: 192.168.55.10
-
 
 volumes:
   ceph-media-volume:

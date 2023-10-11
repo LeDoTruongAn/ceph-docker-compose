@@ -1,5 +1,5 @@
 #!/bin/bash
-docker-compose down
+docker compose down
 # shellcheck disable=SC2046
 docker volume rm $(docker volume ls -q | grep -v portainer_portainer-docker-extension-desktop-extension_portainer_data)
 sudo rm -rf ceph_data/*

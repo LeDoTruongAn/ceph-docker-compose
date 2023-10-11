@@ -45,12 +45,14 @@ $DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/resources/ s3://resources/
 
 ## Enable Ceph Manager cephadm module
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph mgr module enable cephadm
-#
+## Enable Ceph Manager prometheus module
+$DOCKER_COMPOSE_CMD exec ceph-mon ceph mgr module enable prometheus
 ## Create a Ceph Dashboard user for cephadm
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph dashboard ac-user-create cephadm -i /etc/ceph/ceph_password.txt administrator
 #
 ## Set the Ceph orchestrator backend to cephadm
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph orch set backend cephadm
+
 #
 ## Generate SSH keys for cephadm
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph config-key set mgr/cephadm/ssh_identity_key -i /etc/ssh/ssh_host_rsa_key

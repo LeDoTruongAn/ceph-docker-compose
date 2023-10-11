@@ -4,6 +4,14 @@ FROM quay.io/ceph/daemon:latest-reef
 # Install necessary packages
 RUN dnf -y update && dnf install -y openssh-server
 
+# Install the Docker package
+RUN  dnf install -y --skip-broken docker || true
+
+# Install the Chrony package
+RUN yum -y install chrony
+
+# Copy your Chrony configuration file into the container (if needed)
+COPY conf/chrony.conf /etc/chrony/chrony.conf
 
 # Generate SSH keys for cephadm
 RUN ssh-keygen -t ecdsa -f /root/.ssh/ssh_host_ecdsa_key -N ""
@@ -19,6 +27,9 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/
 
 # Expose the SSH port
 EXPOSE 22
+
+# Expose the NTP port (123)
+EXPOSE 123/udp
 # Path: docker-compose.yml
 WORKDIR /
-ENTRYPOINT [ "/bin/sh", "-c"]
+ENTRYPOINT ["/lib/systemd/systemd"]
