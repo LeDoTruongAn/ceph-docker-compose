@@ -2,7 +2,11 @@ version: '3'
 services:
   common-environment:
     container_name: common-environment
-    image: quay.io/ceph/daemon:latest-quincy
+    image: ceph-daemon:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: [ "/bin/sh", "-c" ]
     platform: linux/amd64
     env_file: .env  # Load environment variables from the .env file
     volumes:
@@ -20,7 +24,10 @@ services:
     container_name: ceph-mon
     hostname: ceph-mon
     restart: always
-    command: mon_bootstrap
+    command:
+      - | 
+         sshd && chronyd && /opt/ceph-container/bin/entrypoint.sh mon_bootstrap
+
     networks:
       ceph-net:
         ipv4_address: 192.168.55.2
@@ -33,7 +40,9 @@ services:
     container_name: ceph-mgr
     hostname: ceph-mgr
     restart: always
-    command: mgr_bootstrap
+    command:
+      - |
+        sshd && /opt/ceph-container/bin/entrypoint.sh mgr_bootstrap
     networks:
       ceph-net:
         ipv4_address: 192.168.55.3
@@ -49,7 +58,9 @@ services:
       OSD_ID: 0
     container_name: ceph-osd1
     hostname: ceph-osd1
-    command: osd_bootstrap
+    command:
+      - |
+        sshd && /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -64,7 +75,9 @@ services:
       OSD_ID: 1
     container_name: ceph-osd2
     hostname: ceph-osd2
-    command: osd_bootstrap
+    command:
+      - |
+        sshd && /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -79,7 +92,9 @@ services:
       OSD_ID: 2
     container_name: ceph-osd3
     hostname: ceph-osd3
-    command: osd_bootstrap
+    command:
+      - |
+        sshd && /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -90,7 +105,9 @@ services:
       service: common-environment
     hostname: ceph-rgw
     container_name: ceph-rgw
-    command: rgw_bootstrap
+    command:
+      - |
+        sshd && /opt/ceph-container/bin/entrypoint.sh rgw_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -103,7 +120,9 @@ services:
       service: common-environment
     platform: linux/amd64
     container_name: ceph-mds
-    command: mds_bootstrap
+    command:
+      - |
+        sshd && /opt/ceph-container/bin/entrypoint.sh mds_bootstrap
     hostname: ceph-mds
     restart: always
     networks:
@@ -115,7 +134,9 @@ services:
       service: common-environment
     hostname: ceph-rbd
     container_name: ceph-rbd
-    command: rbd_mirror_bootstrap
+    command:
+      - |
+        sshd && /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -126,7 +147,9 @@ services:
       service: common-environment
     hostname: ceph-nfs
     container_name: ceph-nfs
-    command: nfs_bootstrap
+    command:
+      - |
+        sshd && /opt/ceph-container/bin/entrypoint.sh nfs_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -176,7 +199,6 @@ volumes:
       type: none
       o: bind
       device: ${PWD}/osds/osd3/
-
 networks:
   ceph-net:
     driver: bridge

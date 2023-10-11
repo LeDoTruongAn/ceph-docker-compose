@@ -1,0 +1,18 @@
+.idea
+ceph_conf
+ceph_data
+osds
+scripts
+ssh
+resources
+# files to be ignored
+Dockerfile
+.env
+.s3cfg
+README.md
+delete.sh
+install.sh
+step_one.sh
+step_two.sh
+step_three
+

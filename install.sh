@@ -1,6 +1,7 @@
 ./step_one.sh
 
-docker-compose up -d ceph-mon ceph-mgr
+docker-compose up -d ceph-mon
+docker-compose up -d ceph-mgr
 
 ./step_two.sh
 
@@ -13,7 +14,7 @@ docker-compose up -d ceph-osd3
 docker-compose up -d ceph-rgw
 docker-compose up -d ceph-mds
 docker-compose up -d ceph-rbd
-# Create NFS
-docker-compose up -d ceph-nfs
+# Create NFS - Optional
+# docker-compose up -d ceph-nfs
 
 ./step_three.sh

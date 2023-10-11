@@ -18,9 +18,11 @@ echo "osd_crush_chooseleaf_type = 1" | sudo tee -a ceph_conf/ceph.conf
 # Additional OSD settings
 echo "[osd]" | sudo tee -a ceph_conf/ceph.conf
 echo "osd_journal_size = 5120" | sudo tee -a ceph_conf/ceph.conf
+echo "osd_memory_target = 512MB" | sudo tee -a ceph_conf/ceph.conf
 
 set +x
-
+# Create an administrator password file (use a more secure method)
+echo "administrator_password" > ceph_conf/ceph_password.txt
 # Get the operating system type
 OS=$(uname -s)
 
@@ -36,3 +38,4 @@ fi
 # Restart Ceph components to apply changes without health warnings
 $DOCKER_COMPOSE_CMD restart ceph-mon ceph-mgr
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph osd pool create default.rgw.buckets.data 512 512
+$DOCKER_COMPOSE_CMD exec ceph-mon ceph osd pool application enable default.rgw.buckets.data rgw

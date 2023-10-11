@@ -6,3 +6,4 @@ resources
 tmp
 .s3cfg
 .env
+
