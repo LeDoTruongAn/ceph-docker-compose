@@ -20,8 +20,6 @@ RUN ssh-keygen -t rsa -f /root/.ssh/ssh_host_rsa_key -N ""
 
 RUN cp /root/.ssh/ssh_host_rsa_key.pub /root/.ssh/authorized_keys
 RUN cp -r /root/.ssh/* /etc/ssh/
-
-
 # Disable password authentication
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 
@@ -31,5 +29,7 @@ EXPOSE 22
 # Expose the NTP port (123)
 EXPOSE 123/udp
 # Path: docker-compose.yml
+
 WORKDIR /
-ENTRYPOINT ["/lib/systemd/systemd"]
+
+ENTRYPOINT ["/bin/bash", "-c"]

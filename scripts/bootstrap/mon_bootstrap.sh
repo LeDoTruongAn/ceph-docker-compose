@@ -25,5 +25,6 @@ mon addr = ${MON_IP}
 ENDHERE
 fi
   chown --verbose ceph. /etc/ceph/*
+  systemctl start ceph-mon
 }
 

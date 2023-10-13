@@ -20,8 +20,27 @@ function bootstrap_mds {
     chown --verbose -R ceph. "$MDS_PATH"
   fi
 
-  # start MDS
-  ceph-mds "${DAEMON_OPTS[@]}" -i "$MDS_NAME"
+  # start MDS as a daemon in background
+  if [[ ! -e /etc/systemd/system/ceph-mds.service ]]; then
+    cat <<ENDHERE >/etc/systemd/system/ceph-mds.service
+
+[Unit]
+Description=Ceph metadata server daemon
+After=network.target
+
+
+[Service]
+ExecStart=/usr/bin/ceph-mds ${DAEMON_OPTS[@]} -i $MDS_NAME
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+ENDHERE
+    systemctl enable ceph-mds
+  fi
+  systemctl start ceph-mds
 }
 
 

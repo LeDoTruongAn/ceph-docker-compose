@@ -3,12 +3,11 @@ services:
   common-environment:
     container_name: common-environment
     image: ceph-daemon:latest
+    privileged: true
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint:
-        - /bin/bash
-        - -c
+    entrypoint: ['/lib/systemd/systemd']
     platform: linux/amd64
     env_file: .env  # Load environment variables from the .env file
     volumes:
@@ -19,19 +18,18 @@ services:
       - ceph-osd1-volume:/var/lib/ceph/osd/ceph-0:rw
       - ceph-osd2-volume:/var/lib/ceph/osd/ceph-1:rw
       - ceph-osd3-volume:/var/lib/ceph/osd/ceph-2:rw
-      - ./.s3cfg:/root/.s3cfg
+      - ./.s3cfg:/root/.s3cfg:rw
+      - ./.env:/root/.env:rw
+
   ceph-mon:
     extends:
       service: common-environment
     container_name: ceph-mon
     environment:
       MON_ID: 0
-    privileged: true
     hostname: ceph-mon
     restart: always
-    command:
-      - |
-         sshd && /opt/ceph-container/bin/entrypoint.sh mon_bootstrap
+    command: --systemd=off --foreground -i ceph-mon
     networks:
       ceph-net:
         ipv4_address: 192.168.55.2
@@ -44,9 +42,6 @@ services:
     container_name: ceph-mgr
     hostname: ceph-mgr
     restart: always
-    command:
-      - |
-        sshd && /opt/ceph-container/bin/entrypoint.sh mgr_bootstrap
     networks:
       ceph-net:
         ipv4_address: 192.168.55.3
@@ -54,51 +49,36 @@ services:
       - '8443:8443'
 
   ceph-osd1:
-    pid: host
-    privileged: true
     extends:
       service: common-environment
     environment:
       OSD_ID: 0
     container_name: ceph-osd1
     hostname: ceph-osd1
-    command:
-      - |
-        sshd && /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
     restart: always
     networks:
       ceph-net:
         ipv4_address: 192.168.55.4
 
   ceph-osd2:
-    pid: host
-    privileged: true
     extends:
       service: common-environment
     environment:
       OSD_ID: 1
     container_name: ceph-osd2
     hostname: ceph-osd2
-    command:
-      - |
-        sshd && /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
     restart: always
     networks:
       ceph-net:
         ipv4_address: 192.168.55.5
 
   ceph-osd3:
-    pid: host
-    privileged: true
     extends:
       service: common-environment
     environment:
       OSD_ID: 2
     container_name: ceph-osd3
     hostname: ceph-osd3
-    command:
-      - |
-        sshd && /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -109,9 +89,9 @@ services:
       service: common-environment
     hostname: ceph-rgw
     container_name: ceph-rgw
-    command:
-      - |
-        sshd && /opt/ceph-container/bin/entrypoint.sh rgw_bootstrap
+#    command:
+#      - |
+#        sshd && /opt/ceph-container/bin/entrypoint.sh rgw_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -124,9 +104,9 @@ services:
       service: common-environment
     platform: linux/amd64
     container_name: ceph-mds
-    command:
-      - |
-        sshd && /opt/ceph-container/bin/entrypoint.sh mds_bootstrap
+#    command:
+#      - |
+#        sshd && /opt/ceph-container/bin/entrypoint.sh mds_bootstrap
     hostname: ceph-mds
     restart: always
     networks:
@@ -138,9 +118,9 @@ services:
       service: common-environment
     hostname: ceph-rbd
     container_name: ceph-rbd
-    command:
-      - |
-        sshd && /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bootstrap
+#    command:
+#      - |
+#        sshd && /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -151,13 +131,25 @@ services:
       service: common-environment
     hostname: ceph-nfs
     container_name: ceph-nfs
-    command:
-      - |
-        sshd && /opt/ceph-container/bin/entrypoint.sh nfs_bootstrap
+#    command:
+#      - |
+#        sshd && /opt/ceph-container/bin/entrypoint.sh nfs_bootstrap
     restart: always
     networks:
       ceph-net:
         ipv4_address: 192.168.55.10
+
+
+  ceph-setup:
+    extends:
+      service: common-environment
+    container_name: ceph-setup
+    hostname: ceph-setup
+    entrypoint: ['/lib/systemd/systemd']
+    restart: always
+    networks:
+      ceph-net:
+        ipv4_address: 192.168.55.11
 
 volumes:
   ceph-media-volume:

@@ -205,6 +205,24 @@ function start_mon {
       DAEMON_OPTS+=("--default-mon-cluster-log-to-file=false")
     fi
     log "SUCCESS"
-    exec /usr/bin/ceph-mon "${DAEMON_OPTS[@]}" -i "${MON_NAME}" --mon-data "$MON_DATA_DIR" --public-addr "${MON_IP}"
+    # Run exec /usr/bin/ceph-mon "${DAEMON_OPTS[@]}" -i "${MON_NAME}" --mon-data "$MON_DATA_DIR" --public-addr "${MON_IP}" --setuser ceph --setgroup ceph
+    # to avoid ceph-mon to be stopped by SIGTERM
+    if [[ ! -e /etc/systemd/system/ceph-mon.service ]]; then
+          cat <<ENDHERE >/etc/systemd/system/ceph-mon.service
+[Unit]
+Description=Ceph cluster monitor daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/ceph-mon ${DAEMON_OPTS[@]} -i ${MON_NAME} --mon-data $MON_DATA_DIR --public-addr ${MON_IP}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+ENDHERE
+    fi
+
+    systemctl enable ceph-mon
   fi
 }

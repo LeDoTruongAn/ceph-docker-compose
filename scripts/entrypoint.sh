@@ -9,7 +9,6 @@ source /opt/ceph-container/bin/variables_entrypoint.sh
 source /opt/ceph-container/bin/common_functions.sh
 source /opt/ceph-container/bin/docker_exec.sh
 source /opt/ceph-container/bin/debug.sh
-
 ###########################
 # CONFIGURATION GENERATOR #
 ###########################
@@ -241,5 +240,4 @@ case "$CEPH_DAEMON" in
     invalid_ceph_daemon
     ;;
 esac
-
 exit 0

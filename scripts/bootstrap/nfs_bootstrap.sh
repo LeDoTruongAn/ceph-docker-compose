@@ -40,5 +40,22 @@ ENDHERE
 
   # start ganesha
   mkdir -p /var/run/ganesha
-  ganesha.nfsd "${GANESHA_OPTIONS[@]}" -L STDOUT "${GANESHA_EPOCH}"
+  if [[ ! -e /etc/systemd/system/ganesha.service ]]; then
+    cat <<ENDHERE >/etc/systemd/system/ganesha.service
+[Unit]
+Description=NFS-Ganesha
+After=network.target
+
+[Service]
+ExecStart=ganesha.nfsd "${GANESHA_OPTIONS[@]}" -L STDOUT "${GANESHA_EPOCH}"
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+ENDHERE
+    systemctl enable ganesha
+  fi
+  systemctl start ganesha
 }
