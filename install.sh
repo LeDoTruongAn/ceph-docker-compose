@@ -2,15 +2,12 @@
 
 docker compose up -d ceph-mon ceph-mgr
 
-./step_two.sh
-
 
 docker compose exec ceph-mon /opt/ceph-container/bin/entrypoint.sh mon_bootstrap
 docker compose exec ceph-mgr /opt/ceph-container/bin/entrypoint.sh mgr_bootstrap
 
 
-#docker-compose exec ceph-mon-container /usr/bin/ceph-mon
-
+./step_two.sh
 
 # Create OSDs for RBD mirroring
 docker compose up -d ceph-osd1 ceph-osd2 ceph-osd3
@@ -39,4 +36,5 @@ docker compose exec ceph-rbd /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bo
 
 docker compose restart ceph-mon ceph-mgr ceph-osd1 ceph-osd2 ceph-osd3 ceph-rgw ceph-mds ceph-rbd
 
-docker compose exec ceph-mon ceph orch host add ceph-mon 192.168.55.2
+docker compose exec ceph-mon ceph config set mgr mgr/cephadm/warn_on_stray_hosts false
+docker compose exec ceph-mon ceph config set mgr mgr/cephadm/warn_on_stray_daemons false

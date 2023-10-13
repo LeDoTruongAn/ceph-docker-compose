@@ -89,9 +89,6 @@ services:
       service: common-environment
     hostname: ceph-rgw
     container_name: ceph-rgw
-#    command:
-#      - |
-#        sshd && /opt/ceph-container/bin/entrypoint.sh rgw_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -104,9 +101,6 @@ services:
       service: common-environment
     platform: linux/amd64
     container_name: ceph-mds
-#    command:
-#      - |
-#        sshd && /opt/ceph-container/bin/entrypoint.sh mds_bootstrap
     hostname: ceph-mds
     restart: always
     networks:
@@ -118,9 +112,6 @@ services:
       service: common-environment
     hostname: ceph-rbd
     container_name: ceph-rbd
-#    command:
-#      - |
-#        sshd && /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bootstrap
     restart: always
     networks:
       ceph-net:
@@ -131,9 +122,6 @@ services:
       service: common-environment
     hostname: ceph-nfs
     container_name: ceph-nfs
-#    command:
-#      - |
-#        sshd && /opt/ceph-container/bin/entrypoint.sh nfs_bootstrap
     restart: always
     networks:
       ceph-net:
