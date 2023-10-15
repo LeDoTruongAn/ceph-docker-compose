@@ -9,6 +9,8 @@ services:
       dockerfile: Dockerfile
     entrypoint: ['/lib/systemd/systemd']
     platform: linux/amd64
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     env_file: .env  # Load environment variables from the .env file
     volumes:
       - ceph-conf-volume:/etc/ceph:rw
@@ -35,6 +37,7 @@ services:
         ipv4_address: 192.168.55.2
     ports:
       - '6789:6789'
+      - '3300:3300'
 
   ceph-mgr:
     extends:
@@ -188,3 +191,4 @@ networks:
     ipam:
       config:
         - subnet: 192.168.55.0/24
+
