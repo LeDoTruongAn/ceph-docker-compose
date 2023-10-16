@@ -20,9 +20,7 @@ services:
       - ./ceph_run/${CEPH_FSID}:/var/run/ceph:rw
       - ./scripts:/opt/ceph-container/bin/
       - ./resources:/etc/resources:rw
-      - ./osds/osd1:/var/lib/ceph/osd/ceph-0:rw
-      - ./osds/osd2:/var/lib/ceph/osd/ceph-1:rw
-      - ./osds/osd3:/var/lib/ceph/osd/ceph-2:rw
+      - ./ceph_log/${CEPH_FSID}/osd:/var/lib/ceph/osd:rw
       - ./.s3cfg:/root/.s3cfg:rw
       - ./.env:/root/.env:rw
   ceph-mon:

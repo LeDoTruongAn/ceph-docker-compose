@@ -27,10 +27,6 @@ $DOCKER_COMPOSE_CMD exec ceph-mon radosgw-admin caps add --caps="buckets=*;users
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph config set mon mon_warn_on_insecure_global_id_reclaim_allowed false
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph config set mon auth_expose_insecure_global_id_reclaim false
 
-# Create an S3 bucket and sync data (assuming /etc/resources exists)
-$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd mb s3://resources
-$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/resources/ s3://resources/
-
 ## Enable Ceph Manager cephadm module
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph mgr module enable cephadm
 ## Enable Ceph Manager prometheus module
@@ -46,3 +42,7 @@ $DOCKER_COMPOSE_CMD exec ceph-mon ceph orch set backend cephadm
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph config-key set mgr/cephadm/ssh_identity_key -i /etc/ssh/ssh_host_rsa_key
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph config-key set mgr/cephadm/ssh_identity_pub -i /etc/ssh/ssh_host_rsa_key.pub
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph mgr fail
+
+# Create an S3 bucket and sync data (assuming /etc/resources exists)
+#$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd mb s3://resources
+#$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/resources/ s3://resources/

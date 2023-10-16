@@ -10,3 +10,5 @@ echo "administrator_password" > ceph_conf/"${CEPH_FSID}"/ceph_password.txt
 $DOCKER_COMPOSE_CMD restart ceph-mon ceph-mgr
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph osd pool create default.rgw.buckets.data 512 512
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph osd pool application enable default.rgw.buckets.data rgw
+
+set +x

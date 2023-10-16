@@ -27,7 +27,7 @@ function bootstrap_rgw {
     # shellcheck disable=SC2153
     RGW_FRONTED_OPTIONS="$RGW_FRONTEND_OPTIONS port=$RGW_FRONTEND_IP:$RGW_FRONTEND_PORT"
   elif [[ "$RGW_FRONTEND_TYPE" == "beast" ]]; then
-    RGW_FRONTED_OPTIONS="$RGW_FRONTEND_OPTIONS endpoint=$RGW_FRONTEND_IP:$RGW_FRONTEND_PORT port=$RGW_FRONTEND_PORT"
+    RGW_FRONTED_OPTIONS="$RGW_FRONTEND_OPTIONS endpoint=$RGW_FRONTEND_IP port=$RGW_FRONTEND_PORT"
   else
     log "ERROR: unsupported rgw backend type $RGW_FRONTEND_TYPE"
     exit 1
@@ -81,3 +81,4 @@ ENDHERE
   systemctl start ceph-radosgw@rgw."${RGW_NAME}"
   log "Ceph RGW started."
 }
+
