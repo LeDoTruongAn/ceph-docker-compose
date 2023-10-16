@@ -7,3 +7,8 @@ sudo rm -rf ceph_conf/*
 sudo rm -rf osds/osd1/*
 sudo rm -rf osds/osd2/*
 sudo rm -rf osds/osd3/*
+sudo rm -rf ceph_log/*
+sudo rm -rf ceph_run/*
+
+# Delete the network if it exists already
+docker network inspect ceph-host-net &> /dev/null && docker network rm ceph-host-net

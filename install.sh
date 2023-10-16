@@ -1,4 +1,4 @@
-./step_one.sh
+./step-01.sh
 
 docker compose up -d ceph-mon ceph-mgr
 
@@ -7,7 +7,7 @@ docker compose exec ceph-mon /opt/ceph-container/bin/entrypoint.sh mon_bootstrap
 docker compose exec ceph-mgr /opt/ceph-container/bin/entrypoint.sh mgr_bootstrap
 
 
-./step_two.sh
+./step-02.sh
 
 # Create OSDs for RBD mirroring
 docker compose up -d ceph-osd1 ceph-osd2 ceph-osd3
@@ -31,7 +31,7 @@ docker compose exec ceph-rbd /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bo
 # Create NFS - Optional
 # docker-compose up -d ceph-nfs
 
-./step_three.sh
+./step-03.sh
 
 
 docker compose restart ceph-mon ceph-mgr ceph-osd1 ceph-osd2 ceph-osd3 ceph-rgw ceph-mds ceph-rbd

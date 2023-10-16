@@ -214,7 +214,7 @@ Description=Ceph cluster monitor daemon
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/ceph-mon ${DAEMON_OPTS[@]} -i ${MON_NAME} --mon-data $MON_DATA_DIR --public-addr ${MON_IP}
+ExecStart=/usr/bin/ceph-mon ${DAEMON_OPTS[@]} -n mon.${MON_NAME} --mon-data $MON_DATA_DIR --public-addr ${MON_IP}
 Restart=on-failure
 RestartSec=5
 

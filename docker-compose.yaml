@@ -7,22 +7,24 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: ['/lib/systemd/systemd']
+    entrypoint: [ '/lib/systemd/systemd' ]
     platform: linux/amd64
     extra_hosts:
       - "host.docker.internal:host-gateway"
     env_file: .env  # Load environment variables from the .env file
     volumes:
-      - ceph-conf-volume:/etc/ceph:rw
-      - ceph-lib-volume:/var/lib/ceph:rw
-      - ceph-script-volume:/opt/ceph-container/bin/
-      - ceph-media-volume:/etc/resources:rw
-      - ceph-osd1-volume:/var/lib/ceph/osd/ceph-0:rw
-      - ceph-osd2-volume:/var/lib/ceph/osd/ceph-1:rw
-      - ceph-osd3-volume:/var/lib/ceph/osd/ceph-2:rw
+      - ./ceph_conf/${CEPH_FSID}:/etc/ceph:rw
+      - ./ceph_data/${CEPH_FSID}:/var/lib/ceph:rw
+      - ./ceph_data/${CEPH_FSID}/crash:/var/lib/ceph/crash:rw
+      - ./ceph_log/${CEPH_FSID}:/var/log/ceph:rw
+      - ./ceph_run/${CEPH_FSID}:/var/run/ceph:rw
+      - ./scripts:/opt/ceph-container/bin/
+      - ./resources:/etc/resources:rw
+      - ./osds/osd1:/var/lib/ceph/osd/ceph-0:rw
+      - ./osds/osd2:/var/lib/ceph/osd/ceph-1:rw
+      - ./osds/osd3:/var/lib/ceph/osd/ceph-2:rw
       - ./.s3cfg:/root/.s3cfg:rw
       - ./.env:/root/.env:rw
-
   ceph-mon:
     extends:
       service: common-environment
@@ -31,7 +33,6 @@ services:
       MON_ID: 0
     hostname: ceph-mon
     restart: always
-    command: --systemd=off --foreground -i ceph-mon
     networks:
       ceph-net:
         ipv4_address: 192.168.55.2
@@ -130,61 +131,16 @@ services:
       ceph-net:
         ipv4_address: 192.168.55.10
 
-
   ceph-setup:
     extends:
       service: common-environment
     container_name: ceph-setup
     hostname: ceph-setup
-    entrypoint: ['/lib/systemd/systemd']
+    entrypoint: [ '/lib/systemd/systemd' ]
     restart: always
     networks:
       ceph-net:
         ipv4_address: 192.168.55.11
-
-volumes:
-  ceph-media-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/resources/
-  ceph-script-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/scripts/
-  ceph-conf-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/ceph_conf/
-  ceph-lib-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/ceph_data/
-  ceph-osd1-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/osds/osd1/
-  ceph-osd2-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/osds/osd2/
-  ceph-osd3-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/osds/osd3/
 networks:
   ceph-net:
     driver: bridge

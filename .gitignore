@@ -1,6 +1,8 @@
 .idea
 ceph_conf
 ceph_data
+ceph_log
+ceph_run
 osds
 resources
 tmp

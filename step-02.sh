@@ -2,21 +2,9 @@
 
 # Set Ceph configuration parameters in ceph.conf
 set -x
+source load-env.sh
 # Create an administrator password file
-echo "administrator_password" > ceph_conf/ceph_password.txt
-
-# Get the operating system type
-OS=$(uname -s)
-
-# Define the Docker Compose command based on the OS
-if [ "$OS" = "Darwin" ]; then
-    DOCKER_COMPOSE_CMD="docker-compose"
-elif [ "$OS" = "Linux" ]; then
-    DOCKER_COMPOSE_CMD="docker compose"
-else
-    echo "Unsupported operating system: $OS"
-    exit 1
-fi
+echo "administrator_password" > ceph_conf/"${CEPH_FSID}"/ceph_password.txt
 
 # Restart Ceph components to apply changes without health warnings
 $DOCKER_COMPOSE_CMD restart ceph-mon ceph-mgr

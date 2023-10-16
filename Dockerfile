@@ -1,5 +1,5 @@
 # Use the base image (ceph/daemon) to build the image
-FROM quay.io/ceph/daemon:latest-reef
+FROM quay.io/ceph/ceph:v18.2.0
 
 # Install necessary packages
 RUN dnf -y update && dnf install -y openssh-server
@@ -32,4 +32,4 @@ EXPOSE 123/udp
 
 WORKDIR /
 
-ENTRYPOINT ["/bin/bash", "-c"]
+ENTRYPOINT ["/usr/sbin/init"]
