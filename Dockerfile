@@ -2,7 +2,7 @@
 FROM quay.io/ceph/ceph:v18.2.0
 
 # Install necessary packages
-RUN dnf -y update && dnf install -y openssh-server
+RUN dnf -y update && dnf install -y openssh-server s3cmd
 
 # Install the Docker package
 RUN  dnf install -y --skip-broken docker || true

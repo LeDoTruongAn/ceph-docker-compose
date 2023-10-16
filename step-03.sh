@@ -28,8 +28,8 @@ $DOCKER_COMPOSE_CMD exec ceph-mon ceph config set mon mon_warn_on_insecure_globa
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph config set mon auth_expose_insecure_global_id_reclaim false
 
 # Create an S3 bucket and sync data (assuming /etc/resources exists)
-#$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd mb s3://resources
-#$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/resources/ s3://resources/
+$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd mb s3://resources
+$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/resources/ s3://resources/
 
 ## Enable Ceph Manager cephadm module
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph mgr module enable cephadm
