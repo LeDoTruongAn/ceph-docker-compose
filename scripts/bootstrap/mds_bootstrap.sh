@@ -21,8 +21,8 @@ function bootstrap_mds {
   fi
 
   # start MDS as a daemon in background
-  if [[ ! -e /etc/systemd/system/ceph-mds.service ]]; then
-    cat <<ENDHERE >/etc/systemd/system/ceph-mds.service
+  if [[ ! -e /etc/systemd/system/ceph-mds@"${MDS_NAME}".service ]]; then
+    cat <<ENDHERE >/etc/systemd/system/ceph-mds@"${MDS_NAME}".service
 
 [Unit]
 Description=Ceph metadata server daemon
@@ -38,9 +38,9 @@ RestartSec=5
 WantedBy=multi-user.target
 
 ENDHERE
-    systemctl enable ceph-mds
+    systemctl enable ceph-mds@"${MDS_NAME}"
   fi
-  systemctl start ceph-mds
+  systemctl start ceph-mds@"${MDS_NAME}"
 }
 
 

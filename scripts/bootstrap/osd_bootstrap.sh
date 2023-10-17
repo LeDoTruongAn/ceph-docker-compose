@@ -99,8 +99,8 @@ ENDHERE
 
   # Run exec /usr/bin/ceph-osd "${DAEMON_OPTS[@]}" -i "$OSD_ID"
   # to avoid ceph-osd to be stopped by SIGTERM
-  if [[ ! -e /etc/systemd/system/ceph-osd.service ]]; then
-    cat <<ENDHERE >/etc/systemd/system/ceph-osd.service
+  if [[ ! -e /etc/systemd/system/ceph-osd@"${OSD_ID}".service ]]; then
+    cat <<ENDHERE >/etc/systemd/system/ceph-osd@"${OSD_ID}".service
 [Unit]
 Description=Ceph cluster OSD daemon
 After=network.target
@@ -114,7 +114,7 @@ RestartSec=5
 WantedBy=multi-user.target
 
 ENDHERE
-    systemctl enable ceph-osd
+    systemctl enable ceph-osd@"${OSD_ID}"
   fi
-  systemctl start ceph-osd
+  systemctl start ceph-osd@"${OSD_ID}"
 }

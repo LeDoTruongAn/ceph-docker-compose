@@ -10,6 +10,6 @@ function bootstrap_mon {
   source /opt/ceph-container/bin/start_mon.sh
   start_mon
   chown --verbose ceph. /etc/ceph/*
-  systemctl start ceph-mon
+  systemctl start ceph-"${CEPH_FSID}"@mon."${MON_NAME}"
 }
 

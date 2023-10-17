@@ -4,6 +4,7 @@ services:
     container_name: common-environment
     image: ceph-daemon:latest
     privileged: true
+    ipc: host  # Required for systemd
     build:
       context: .
       dockerfile: Dockerfile
@@ -16,11 +17,11 @@ services:
       - ./ceph_conf/${CEPH_FSID}:/etc/ceph:rw
       - ./ceph_data/${CEPH_FSID}:/var/lib/ceph:rw
       - ./ceph_data/${CEPH_FSID}/crash:/var/lib/ceph/crash:rw
+      - ./ceph_data/${CEPH_FSID}/osd:/var/lib/ceph/osd:rw
       - ./ceph_log/${CEPH_FSID}:/var/log/ceph:rw
       - ./ceph_run/${CEPH_FSID}:/var/run/ceph:rw
       - ./scripts:/opt/ceph-container/bin/
       - ./resources:/etc/resources:rw
-      - ./ceph_log/${CEPH_FSID}/osd:/var/lib/ceph/osd:rw
       - ./.s3cfg:/root/.s3cfg:rw
       - ./.env:/root/.env:rw
   ceph-mon:
@@ -49,7 +50,8 @@ services:
         ipv4_address: 192.168.55.3
     ports:
       - '8443:8443'
-
+      - '9283:9283'
+      - '8765:8765'
   ceph-osd1:
     extends:
       service: common-environment
@@ -101,7 +103,6 @@ services:
   ceph-mds:
     extends:
       service: common-environment
-    platform: linux/amd64
     container_name: ceph-mds
     hostname: ceph-mds
     restart: always

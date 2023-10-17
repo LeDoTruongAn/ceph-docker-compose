@@ -13,8 +13,8 @@ function bootstrap_mgr {
 
   # start ceph-mgr
 # Run ceph-mgr with the same name as the container by using the systemd unit template
-   if [[ ! -e /etc/systemd/system/ceph-mgr.service ]]; then
-            cat <<ENDHERE >/etc/systemd/system/ceph-mgr.service
+   if [[ ! -e /etc/systemd/system/ceph-mgr@"${MGR_NAME}".service ]]; then
+            cat <<ENDHERE >/etc/systemd/system/ceph-mgr@"${MGR_NAME}".service
 [Unit]
 Description=Ceph cluster manager daemon
 After=network.target
@@ -28,7 +28,7 @@ RestartSec=5
 WantedBy=multi-user.target
 
 ENDHERE
-    systemctl enable ceph-mgr
+    systemctl enable ceph-mgr@"${MGR_NAME}"
     fi
-  systemctl start ceph-mgr
+  systemctl start ceph-mgr@"${MGR_NAME}"
 }

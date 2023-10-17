@@ -39,10 +39,10 @@ $DOCKER_COMPOSE_CMD exec ceph-mon ceph orch set backend cephadm
 
 #
 ## Generate SSH keys for cephadm
-$DOCKER_COMPOSE_CMD exec ceph-mon ceph config-key set mgr/cephadm/ssh_identity_key -i /etc/ssh/ssh_host_rsa_key
-$DOCKER_COMPOSE_CMD exec ceph-mon ceph config-key set mgr/cephadm/ssh_identity_pub -i /etc/ssh/ssh_host_rsa_key.pub
+$DOCKER_COMPOSE_CMD exec ceph-mon ceph cephadm set-priv-key -i /root/.ssh/ssh_host_rsa_key
+$DOCKER_COMPOSE_CMD exec ceph-mon ceph cephadm set-pub-key -i /root/.ssh/ssh_host_rsa_key.pub
 $DOCKER_COMPOSE_CMD exec ceph-mon ceph mgr fail
 
 # Create an S3 bucket and sync data (assuming /etc/resources exists)
-#$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd mb s3://resources
-#$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/resources/ s3://resources/
+$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd mb s3://resources
+$DOCKER_COMPOSE_CMD exec ceph-mon s3cmd sync /etc/resources/ s3://resources/

@@ -59,10 +59,10 @@ ENDHERE
 
   # shellcheck disable=SC2145
   # shellcheck disable=SC2027
-  log "Creating RGW user... radosgw ${DAEMON_OPTS[@]} -n client.rgw."${RGW_NAME}" -k $RGW_KEYRING"
+  log "Creating RGW user... radosgw ${DAEMON_OPTS[@]} -n client.rgw.${RGW_NAME} -k $RGW_KEYRING"
   # start RGW as a daemon in background
-  if [[ ! -e /etc/systemd/system/ceph-radosgw@rgw."${RGW_NAME}".service ]]; then
-    cat <<ENDHERE >/etc/systemd/system/ceph-radosgw@rgw."${RGW_NAME}".service
+  if [[ ! -e /etc/systemd/system/ceph-radosgw@"${RGW_NAME}".service ]]; then
+    cat <<ENDHERE >/etc/systemd/system/ceph-radosgw@"${RGW_NAME}".service
 
 [Unit]
 Description=Ceph rados gateway daemon
@@ -76,7 +76,7 @@ RestartSec=5
 WantedBy=multi-user.target
 
 ENDHERE
-    systemctl enable ceph-radosgw@rgw."${RGW_NAME}"
+    systemctl enable ceph-radosgw@"${RGW_NAME}"
   fi
   systemctl start ceph-radosgw@rgw."${RGW_NAME}"
   log "Ceph RGW started."
