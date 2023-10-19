@@ -23,7 +23,6 @@ mkdir -p osds/osd3
            cat <<ENDHERE >ceph_conf/"${CEPH_FSID}"/ceph.conf
 [global]
 fsid = ${CEPH_FSID}
-mon initial members = ${MON_NAME}
 mon host = ${MON_IP}
 public network = ${CEPH_PUBLIC_NETWORK}
 cluster network = ${CEPH_CLUSTER_NETWORK}

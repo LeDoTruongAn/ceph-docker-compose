@@ -18,6 +18,13 @@ RGW_PATH="/var/lib/ceph/radosgw/${CLUSTER}-rgw.${RGW_NAME}"
 
 # rgw frontend options
 function build_rgw_bootstrap {
+  get_config
+  check_config
+
+  if [ "${CEPH_GET_ADMIN_KEY}" -eq 1 ]; then
+      get_admin_key
+      check_admin_key
+  fi
   bootstrap_rgw
 }
 
@@ -45,7 +52,6 @@ function bootstrap_rgw {
     cat <<ENDHERE >>/etc/ceph/"${CLUSTER}".conf
 
 [client.rgw.${RGW_NAME}]
-rgw dns name = ${RGW_NAME}
 rgw enable usage log = ${RGW_ENABLE_USAGE_LOG}
 rgw usage log tick interval = ${RGW_USAGE_LOG_TICK_INTERVAL}
 rgw usage log flush threshold = ${RGW_USAGE_LOG_FLUSH_THRESHOLD}
@@ -61,8 +67,8 @@ ENDHERE
   # shellcheck disable=SC2027
   log "Creating RGW user... radosgw ${DAEMON_OPTS[@]} -n client.rgw.${RGW_NAME} -k $RGW_KEYRING"
   # start RGW as a daemon in background
-  if [[ ! -e /etc/systemd/system/ceph-radosgw@"${RGW_NAME}".service ]]; then
-    cat <<ENDHERE >/etc/systemd/system/ceph-radosgw@"${RGW_NAME}".service
+  if [[ ! -e /etc/systemd/system/ceph-radosgw@rgw."${RGW_NAME}".service ]]; then
+    cat <<ENDHERE >/etc/systemd/system/ceph-radosgw@rgw."${RGW_NAME}".service
 
 [Unit]
 Description=Ceph rados gateway daemon
@@ -76,7 +82,7 @@ RestartSec=5
 WantedBy=multi-user.target
 
 ENDHERE
-    systemctl enable ceph-radosgw@"${RGW_NAME}"
+    systemctl enable ceph-radosgw@rgw."${RGW_NAME}"
   fi
   systemctl start ceph-radosgw@rgw."${RGW_NAME}"
   log "Ceph RGW started."

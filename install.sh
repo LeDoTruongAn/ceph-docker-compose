@@ -1,5 +1,6 @@
 ./step-01.sh
 
+
 docker compose up -d ceph-mon ceph-mgr
 
 
@@ -32,5 +33,4 @@ docker compose exec ceph-rbd /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bo
 # docker-compose up -d ceph-nfs
 ./step-03.sh
 ./step-04.sh
-# Add host ip
-
+# Add host

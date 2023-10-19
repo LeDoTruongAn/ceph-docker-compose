@@ -55,8 +55,6 @@ function bootstrap_osd {
   OSD_PATH="/var/lib/ceph/osd/${CLUSTER}-${OSD_ID}"
   OSD_PUBLIC_ADDR=${OSD_PUBLIC_ADDR:-$(hostname --ip-address)}
   OSD_CLUSTER_ADDR=${OSD_CLUSTER_ADDR:-$(hostname --ip-address)}
-
-  OSD_HOST="${CLUSTER}-osd$((OSD_ID + 1))"
   if [ ! -e "$OSD_PATH"/keyring ]; then
     if ! grep -qE "osd objectstore = bluestore" /etc/ceph/"${CLUSTER}".conf; then
       echo "osd objectstore = bluestore" >> /etc/ceph/"${CLUSTER}".conf
@@ -65,7 +63,6 @@ function bootstrap_osd {
       cat <<ENDHERE >>/etc/ceph/"${CLUSTER}".conf
 
 [osd.${OSD_ID}]
-host = ${OSD_HOST}
 public_addr = ${OSD_PUBLIC_ADDR}
 cluster_addr = ${OSD_CLUSTER_ADDR}
 osd data = ${OSD_PATH}
@@ -80,7 +77,7 @@ ENDHERE
 
     # if $OSD_DEVICE exists we deploy with ceph-volume
     if [[ -n "$OSD_DEVICE" ]]; then
-      ceph-volume lvm prepare --data "$OSD_DEVICE"
+        ceph-volume lvm prepare --data "$OSD_DEVICE"
     else
       # we go for a 'manual' bootstrap
       ceph "${CLI_OPTS[@]}" auth get-or-create osd."$OSD_ID" mon 'allow profile osd' osd 'allow *' mgr 'allow profile osd' -o "$OSD_PATH"/keyring
