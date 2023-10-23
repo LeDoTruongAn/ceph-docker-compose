@@ -1,0 +1,4 @@
+127.0.0.1       localhost
+192.168.55.4    ceph-osd0
+192.168.55.5    ceph-osd1
+192.168.55.6    ceph-osd2
