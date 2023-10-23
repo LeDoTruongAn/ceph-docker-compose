@@ -1,68 +1,46 @@
-# Ceph Configuration and Deployment Scripts
+# My Ceph Deployment
 
-![ceph-mimic-dash.png](ceph-mimic-dash.png)
+This repository contains a series of scripts to set up a Ceph cluster using Docker Compose. The deployment is divided into three main steps:
 
-This set of shell scripts is designed to simplify the configuration and deployment of a Ceph storage cluster using Docker Compose. Ceph is a distributed storage platform commonly used for large-scale storage solutions. These scripts automate the process of creating necessary directories, configuring Ceph settings, and deploying Ceph components.
+> ⚠️ **Warning: This setup is intended for development purposes and is not suitable for cephadm deployments in a production environment. Please use with caution and adapt it according to your specific use case.**
 
-## `step_one.sh`
+## Step 1: Set up Monitors and Managers
 
-The `step_one.sh` script performs the following tasks:
-
-- Creates essential directories for Ceph configuration and data storage.
-- Sets up directory structure for OSDs (Object Storage Daemons).
-
-Usage:
 ```shell
-./step_one.sh
+./step-01.sh
+
+# Start Ceph Monitors and Managers
+docker compose up -d ceph-mon ceph-mgr
+
+# Bootstrap Monitors and Managers
+docker compose exec ceph-mon /opt/ceph-container/bin/entrypoint.sh mon_bootstrap
+docker compose exec ceph-mgr /opt/ceph-container/bin/entrypoint.sh mgr_bootstrap
 ```
 
-After running this script, you should use Docker Compose to start the Ceph monitor and manager containers:
+## Step 2: Create OSDs, RGW, MDS, RBD, and NFS (Optional)
 
 ```shell
-docker-compose up -d ceph-mon ceph-mgr
-```
+./step-02.sh
 
-## `step_two.sh`
-
-The `step_two.sh` script configures Ceph parameters in the `ceph.conf` file and adjusts pool settings for Object Storage Daemons (OSDs). It also restarts specific Ceph components to apply the changes.
-
-Usage:
-```shell
-./step_two.sh
-```
-
-After running this script, create OSDs for RBD (RADOS Block Device) mirroring and other Ceph components, such as RADOS Gateway (RGW), Metadata Server (MDS), and Network File System (NFS):
-
-```shell
 # Create OSDs for RBD mirroring
-docker-compose up -d ceph-osd1
-docker-compose up -d ceph-osd2
-docker-compose up -d ceph-osd3
+docker compose up -d ceph-osd1 ceph-osd2 ceph-osd3
 
-# Create RGW, MDS, RBD, NFS
-docker-compose up -d ceph-rgw
-docker-compose up -d ceph-mds
-docker-compose up -d ceph-rbd
-# Create NFS
-docker-compose up -d ceph-nfs
+# Bootstrap OSDs
+docker compose exec ceph-osd1 /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
+docker compose exec ceph-osd2 /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
+docker compose exec ceph-osd3 /opt/ceph-container/bin/entrypoint.sh osd_bootstrap
+
+# Create RGW, MDS, RBD
+docker compose up -d ceph-rgw ceph-mds ceph-rbd
+
+# Bootstrap RGW, MDS, and RBD
+docker compose exec ceph-rgw /opt/ceph-container/bin/entrypoint.sh rgw_bootstrap
+docker compose exec ceph-mds /opt/ceph-container/bin/entrypoint.sh mds_bootstrap
+docker compose exec ceph-rbd /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bootstrap
 ```
 
-## `step_three.sh`
+## Step 3: Additional Configuration (if needed)
 
-The `step_three.sh` script enables the Ceph Dashboard, sets up a self-signed certificate, and configures the dashboard's server address and port. It also creates an administrator user, an S3 user, and performs other Ceph-related configurations.
-
-Usage:
 ```shell
-./step_three.sh
+./step-03.sh
 ```
-
-After running this script, your Ceph cluster should be configured with a working Ceph Dashboard, an admin user, and an S3 user. Additionally, an S3 bucket is created, and data is synchronized to it using the `s3cmd` utility (assuming the `/etc/resources` directory exists).
-
-These scripts are designed to streamline the setup of a Ceph storage cluster for various use cases, providing a foundation for scalable and reliable distributed storage solutions.
-
-## Special Thanks
-
-I would like to extend my heartfelt thanks to [Fatlan](https://github.com/fatlan) for his fantastic work on the original [Ceph-Docker-Compose](https://github.com/fatlan/Ceph-Docker-Compose) repository. This project builds upon his foundation, making it easier to configure and deploy Ceph clusters using Docker Compose. His dedication and open-source contribution are greatly appreciated.
-
-## License
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
