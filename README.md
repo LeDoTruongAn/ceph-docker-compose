@@ -4,8 +4,8 @@ Welcome to the Ceph project documentation. This repository contains useful infor
 
 ## Table of Contents
 
-- [Development](wiki/My-Ceph-Deployment)
-- [Production](wiki/Ceph-Cluster-Setup-by-Cephadm)
+- [Development](https://github.com/LeDoTruongAn/ceph-docker-compose/wiki/My-Ceph-Deployment)
+- [Production](https://github.com/LeDoTruongAn/ceph-docker-compose/wiki/Ceph-Cluster-Setup-by-Cephadm)
 
 ## Development
 
