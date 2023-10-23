@@ -32,5 +32,3 @@ docker compose exec ceph-rbd /opt/ceph-container/bin/entrypoint.sh rbd_mirror_bo
 # Create NFS - Optional
 # docker-compose up -d ceph-nfs
 ./step-03.sh
-./step-04.sh
-# Add host

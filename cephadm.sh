@@ -77,4 +77,4 @@ radosgw-admin caps add --caps="buckets=*;users=*;usage=*;metadata=*" --uid="${CE
 
 
 # Delete cluster and all data
-# cephadm rm-cluster --fsid 25dfd746-6cf3-11ee-88d9-259a5997bf7b --force
+cephadm rm-cluster --fsid 25dfd746-6cf3-11ee-88d9-259a5997bf7b --force
